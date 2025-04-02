@@ -1,0 +1,56 @@
+from collections import deque
+
+class Solution:
+    def solve(self, board):
+        # Convert the board into a tuple to be used as a key
+        initial_state = tuple(sum(board, []))  # Flatten the 2D board into a tuple
+
+        # Define the target goal state
+        goal_state = (0, 1, 2, 3, 4, 5, 6, 7, 8)
+
+        # If the initial state is already the goal state, return 0
+        if initial_state == goal_state:
+            return 0
+
+        # Breadth-First Search (BFS) setup
+        queue = deque([(initial_state, 0)])  # Store (state, depth)
+        visited = set([initial_state])  # Set to track visited states
+
+        # Define possible moves for each position
+        moves = {
+            0: [1, 3], 1: [0, 2, 4], 2: [1, 5], 
+            3: [0, 4, 6], 4: [1, 3, 5, 7], 5: [2, 4, 8], 
+            6: [3, 7], 7: [4, 6, 8], 8: [5, 7]
+        }
+
+        # Perform BFS to find the shortest path to the goal state
+        while queue:
+            current_state, depth = queue.popleft()
+
+            # Find the index of 0 (empty space)
+            pos_0 = current_state.index(0)
+
+            # Explore all possible moves from the current state
+            for move in moves[pos_0]:
+                # Swap positions of 0 with the target move position
+                new_state = list(current_state)
+                new_state[move], new_state[pos_0] = new_state[pos_0], new_state[move]
+                new_state = tuple(new_state)
+
+                # If we haven't visited this state, add it to the queue
+                if new_state not in visited:
+                    if new_state == goal_state:
+                        return depth + 1  # Found the goal state, return depth
+                    visited.add(new_state)
+                    queue.append((new_state, depth + 1))
+
+        return -1  # If no solution is found, return -1
+
+# Testing the optimized solution
+ob = Solution()
+matrix = [
+    [3, 1, 2],
+    [4, 7, 5],
+    [6, 8, 0]
+]
+print(ob.solve(matrix))
