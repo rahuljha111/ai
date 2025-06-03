@@ -1,0 +1,15 @@
+# Tower of Hanoi using recursion
+
+def TowerOfHanoi(n, source, destination, auxiliary):
+    if n == 1:
+        print(f"Move disk 1 from {source} to {destination}")
+        return
+    TowerOfHanoi(n - 1, source, auxiliary, destination)
+    print(f"Move disk {n} from {source} to {destination}")
+    TowerOfHanoi(n - 1, auxiliary, destination, source)
+
+# Main function
+def main():
+    n = int(input("Enter the number of disks: "))
+    print("\nSteps to solve the Tower of Hanoi:")
+    TowerOfHanoi(n, '
